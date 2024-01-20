@@ -13,6 +13,8 @@ CREATE TABLE "USER" (
     postal_code VARCHAR(255) DEFAULT NULL,
     role VARCHAR2(10) CHECK( role IN ('ADMIN','CLIENT','DIETITIAN')),
     street VARCHAR(255) DEFAULT NULL,
+    pesel VARCHAR(11) DEFAULT NULL,
+    date_of_birth DATE DEFAULT NULL,
     PRIMARY KEY (id_user));
 
 CREATE TABLE ingredient (
@@ -22,6 +24,7 @@ CREATE TABLE ingredient (
     fat FLOAT NOT NULL,
     name VARCHAR(255) NOT NULL,
     protein FLOAT NOT NULL,
+    calories FLOAT NOT NULL,
     PRIMARY KEY (id_ingredient));
 
 CREATE TABLE product (
@@ -30,7 +33,6 @@ CREATE TABLE product (
     name VARCHAR(255) DEFAULT NULL,
     prep_time VARCHAR(255) DEFAULT NULL,
     rating float DEFAULT NULL,
-    recipe VARCHAR(255) DEFAULT NULL,
     type VARCHAR2(10) CHECK( type IN ('MEAT', 'VEGAN', 'KETOGENIC')),
     PRIMARY KEY (id_product));
 
