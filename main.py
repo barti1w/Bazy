@@ -1,16 +1,21 @@
-# This is a sample Python script.
+import cx_Oracle
+cx_Oracle.init_oracle_client(lib_dir=r"C:\oracle\instantclient_21_12")
+connection = cx_Oracle.connect(user="wojciechowskib", password="bartosz",
+                               dsn="213.184.8.44:1521/ORCL")
+cursor = connection.cursor()
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def run_sql_file(filename):
+    fd = open(filename, 'r')
+    sqlFile = fd.read()
+    fd.close()
 
+    sqlCommands = sqlFile.split(';')
+    sqlCommands.pop()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    for command in sqlCommands:
+        cursor.execute(command)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+try:
+    run_sql_file('sql/Create.sql')
+except:
+    run_sql_file('sql/Drop.sql')
