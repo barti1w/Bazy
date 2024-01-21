@@ -1,5 +1,6 @@
 import random
 from faker import Faker
+from datetime import datetime, timedelta
 
 fake = Faker()
 class DataGenerator:
@@ -155,8 +156,9 @@ class DataGenerator:
             sql_file.write(final_statement)
 
     def create_data_daily_schedule(self, num_records, file_name, max_client_id, max_product_id):
-        num_records = min(num_records, max_client_id * max_product_id)
-        dates_of_diet = [fake.date_between(start_date='-90d', end_date='today') for _ in range(num_records)]
+        end = datetime.strptime("25-01-2024", "%d-%m-%Y")
+        start = end - timedelta(days=num_records)
+        dates_of_diet = [start + timedelta(days=x) for x in range(0, (end - start).days)]
 
         id_client_id_product_date_of_diet = set()
         insert_all_statements = []
