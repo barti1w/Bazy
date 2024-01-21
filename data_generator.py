@@ -199,7 +199,7 @@ class DataGenerator:
         for i in range(num_records):
             id_ingredient = random.randint(1, max_ingredient_id)
             id_product = random.randint(1, max_product_id)
-            amount = f"{amounts[i]} grams"
+            amount = amounts[i]
 
             while (id_ingredient, id_product) in id_ingredient_id_product:
                 id_ingredient = random.randint(1, max_ingredient_id)

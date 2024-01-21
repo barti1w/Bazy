@@ -69,7 +69,7 @@ CREATE TABLE daily_schedule (
 CREATE TABLE product_ingredient (
     id_ingredient INT NOT NULL,
     id_product INT NOT NULL,
-    amount VARCHAR(255) NOT NULL,
+    amount float DEFAULT NULL,
     PRIMARY KEY (id_ingredient,id_product),
     FOREIGN KEY (id_product) REFERENCES product (id_product),
     FOREIGN KEY (id_ingredient) REFERENCES ingredient (id_ingredient));
