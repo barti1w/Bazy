@@ -19,3 +19,9 @@ BEGIN
             p_first_name => 'Janek'
         );
 END;
+
+
+BEGIN
+    REPORTS.GENERATE_MONTHLY('puste', 'puste');
+END;
+
