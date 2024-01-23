@@ -1,5 +1,7 @@
+import cx_Oracle
 import matplotlib.pyplot as plt
-
+import numpy as np
+from scipy.stats import linregress
 
 class ReportData:
     def __init__(self, date, revenue):
@@ -24,16 +26,44 @@ class Report:
         plt.xlabel('Date')
         plt.ylabel('Revenue')
         plt.title(f'{self.type} Revenue Bar Plot')
+        plt.xticks(rotation=45)
         plt.show()
 
 
-# TODO read from DB
-values = [
-    {'date': '2024-01-01', 'revenue': 1500},
-    {'date': '2024-02-01', 'revenue': 2523},
-    {'date': '2024-03-01', 'revenue': 2000},
-    {'date': '2024-04-01', 'revenue': 2680},
+cx_Oracle.init_oracle_client(lib_dir=r"C:\oracle\instantclient_21_12")
+connection = cx_Oracle.connect(user="wojciechowskib", password="bartosz",
+                               dsn="213.184.8.44:1521/ORCL")
+table_name = 'MONTHLY_REPORT'
 
-]
-report = Report(values, 'monthly')
+cursor = connection.cursor()
+
+cursor.execute(f"SELECT * FROM {table_name}")
+
+rows = cursor.fetchall()
+
+formatted_rows = [{'date': "-".join(str(row[0]).split(" ")[0].split("-")[:2]), 'revenue': row[1]} for row in rows]
+
+cursor.close()
+connection.close()
+
+report = Report(formatted_rows, 'monthly')
 report.plot()
+
+x = range(0, len([row[0] for row in rows]))
+y = [row[1] for row in rows]
+
+
+slope, intercept, r_value, p_value, std_err = linregress(x, y)
+
+print(f"Slope: {slope}")
+print(f"Intercept: {intercept}")
+print(f"R-squared: {r_value**2}")
+print(f"P-value: {p_value}")
+print(f"Standard Error: {std_err}")
+
+plt.scatter(x, y, label='Data points')
+plt.plot(x, intercept + slope * x, 'r', label='Regression line')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.show()

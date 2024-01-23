@@ -1,8 +1,11 @@
 import random
-from faker import Faker
 from datetime import datetime, timedelta
 
+from faker import Faker
+
 fake = Faker()
+
+
 class DataGenerator:
     def __init__(self):
         self.dietitian_user_ids = set()
@@ -23,10 +26,12 @@ class DataGenerator:
             password = fake.password()
             phone_number = fake.phone_number()
             postal_code = fake.zipcode()
-            role = random.choice(['ADMIN', 'CLIENT', 'DIETITIAN']) #TODO do we need it, we have relations to client and dietitian
+            role = random.choice(
+                ['ADMIN', 'CLIENT', 'DIETITIAN'])
             street = fake.street_address()
             pesel = fake.random_int(min=10000000000, max=99999999999)
-            date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=80).strftime('%Y-%m-%d') #TODO KACPER popatrz na plik trigger.sql
+            date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=80).strftime(
+                '%Y-%m-%d')
 
             insert_statement = (
                 f"   INTO \"USER\" (id_user, apartment_number, building_number, city, country, email, "
@@ -80,7 +85,7 @@ class DataGenerator:
             meal = random.choice(['BREAKFAST', 'DINNER', 'SUPPER', 'SNACK'])
             name = fake.word() + " Product"
             prep_time = fake.time()
-            rating = round(random.uniform(1, 5), 2) #TODO count it using SQL from daily schedule opinion maybe
+            rating = round(random.uniform(1, 5), 2)
             product_type = random.choice(['MEAT', 'VEGAN', 'KETOGENIC'])
 
             insert_statement = (

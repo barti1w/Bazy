@@ -10,7 +10,7 @@ BEGIN
 END;
 
 BEGIN
-    USER_INTERFACE.delete_user(p_user_id => 16);
+    USER_INTERFACE.delete_user(p_user_id => 15);
 END;
 
 BEGIN
@@ -20,8 +20,6 @@ BEGIN
         );
 END;
 
-
-BEGIN
-    REPORTS.GENERATE_MONTHLY('puste', 'puste');
-END;
-
+CALL REPORTS.GENERATE_MONTHLY(p_meal => null, p_type => null);
+CALL REPORTS.GENERATE_QUARTERLY(p_meal => null, p_type => null);
+CALL REPORTS.GENERATE_YEARLY(p_meal => null, p_type => null);

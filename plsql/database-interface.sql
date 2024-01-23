@@ -119,6 +119,9 @@ CREATE
         ELSE
             DELETE FROM "USER" WHERE ID_USER = p_user_id;
         END IF;
+    EXCEPTION
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('User nie istnieje');
     END;
 
     PROCEDURE update_user(

@@ -2,6 +2,7 @@ CREATE
     OR REPLACE PACKAGE VALIDATORS AS
     FUNCTION birthPesel(p_pesel in VARCHAR2, p_date_of_birth DATE) RETURN BOOLEAN;
 end VALIDATORS;
+/
 
 CREATE OR REPLACE PACKAGE BODY VALIDATORS AS
     FUNCTION birthPesel(p_pesel IN VARCHAR2, p_date_of_birth DATE) RETURN BOOLEAN IS
@@ -43,3 +44,4 @@ CREATE OR REPLACE PACKAGE BODY VALIDATORS AS
         return v_calc_date = p_date_of_birth;
     end;
 end VALIDATORS;
+/

@@ -1,12 +1,13 @@
 import warnings
-warnings.filterwarnings("ignore")
 
 import cx_Oracle
-from data_generator import DataGenerator
 import pandas as pd
 import scipy.stats as stats
 from scipy.stats import f_oneway
 
+from data_generator import DataGenerator
+
+warnings.filterwarnings("ignore")
 number_of_users, user_filename = 10, "user_data.sql"
 number_of_ingredients, ingredient_filename = 100, "ingredient_data.sql"
 number_of_products, product_filename = 30, "product_data.sql"
@@ -53,11 +54,13 @@ def create_database_with_data():
     run_sql_file(daily_schedule_filename)
     run_sql_file(product_ingredient_filename)
 
+
 def get_base_statistics(table_name, connection, columns):
     sql_select = "SELECT * FROM " + table_name
     df = pd.read_sql_query(sql_select, connection)
     print(table_name)
     print(df[columns].describe())
+
 
 def normal(data):
     print("Badanie normalności rozkładu")
@@ -69,6 +72,7 @@ def normal(data):
     else:
         print("Dane wykazują cechy rozkładu normalnego.")
 
+
 def variance(data1, data2):
     stat, p_value = stats.levene(data1, data2)
     print(f'Statystyka: {stat}\nWartość p: {p_value}')
@@ -77,6 +81,7 @@ def variance(data1, data2):
         print("Istnieje istotna różnica w wariancjach.")
     else:
         print("Brak istotnej różnicy w wariancjach.")
+
 
 def dependent(data1, data2, variables_to_test):
     for variable in variables_to_test:
@@ -103,6 +108,7 @@ def independent(data1, data2, variables_to_test):
         else:
             print("Brak istotnych różnic między zmiennymi.")
 
+
 def anova(data1, data2, data3):
     f_statistic, p_value = f_oneway(data1, data2, data3)
     print(f'F-Statistic: {f_statistic}\nP-Value: {p_value}')
@@ -110,7 +116,8 @@ def anova(data1, data2, data3):
     if p_value < 0.05:
         print("Istnieją istotne różnice między grupami.")
     else:
-        print("Brak istotnych różnic między grupami.")
+        print("Brak istotnych różnic między grupami. Posiłki są zbilansowane")
+
 
 if __name__ == "__main__":
     cx_Oracle.init_oracle_client(lib_dir=r"C:\oracle\instantclient_21_12")
@@ -161,7 +168,8 @@ if __name__ == "__main__":
     independent(df_january_february, df_november_december, ['OPINION', 'RATING'])
 
     # Pomiędzy rokiem 2022 a 2023 wprowadziliśmy poprawki w recepturach składników i chcemy sprawdzić czy pomogło
-    dependent(df[df['DATE_OF_DIET'].dt.year.isin([2022])].copy(), df[df['DATE_OF_DIET'].dt.year.isin([2023])].copy(), ['OPINION', 'RATING', 'PREP_TIME'])
+    dependent(df[df['DATE_OF_DIET'].dt.year.isin([2022])].copy(), df[df['DATE_OF_DIET'].dt.year.isin([2023])].copy(),
+              ['OPINION', 'RATING', 'PREP_TIME'])
 
     print("\nTesty dla wielu średnich (analiza wariancji)")
     anova(df_ingredient['PROTEIN'], df_ingredient['FAT'], df_ingredient['CARBS'])
